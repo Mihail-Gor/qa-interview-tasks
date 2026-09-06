@@ -21,7 +21,7 @@ public class FindMostFrequent {
 
     public static char findMostFrequent(String input) {
 
-        if (input == null || input.isEmpty()) {
+        if (input == null || input.isBlank()) {
             throw new IllegalArgumentException("Input cannot be null or empty");
         }
 
