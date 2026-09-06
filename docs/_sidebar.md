@@ -1,4 +1,4 @@
-<!-- _sidebar.md -->
+﻿<!-- _sidebar.md -->
 
 * **🎯 Навигация**
   * [🏠 Главная страница](README.md)
@@ -37,7 +37,7 @@
     * [Жизненный цикл и параллелизация](questions/frameworks-ci-cd/testng-junit5/junit5-lifecycle-and-parallel.md)
   * **Architecture**
     * [Архитектура тест-фреймворка](questions/architecture-design/automation-framework-architecture.md)
-  * **Теория тестиров��ния**
+  * **Теория тестироваания**
     * [Техники тест-дизайна в автотестах](questions/testing-theory/test-design-techniques.md)
 
 * **📋 Интервью и Ретроспективы**

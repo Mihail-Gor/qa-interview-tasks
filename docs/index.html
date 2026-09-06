@@ -152,11 +152,11 @@
           
           // Hook after markdown rendering for Callouts & Styling enhancements
           hook.afterEach(function (html, next) {
-            // Transform TL;DR heading into callout card
+            // Transform TL;DR / Quick Summary heading into callout card
             html = html.replace(
-              /<h3[^>]*>(?:⚡|✨)?\s*Краткий ответ\s*(?:\(TL;DR[^)]*\))?<\/h3>([\s\S]*?)(?=<hr|<h2|<h3|$)/gi,
+              /<h3[^>]*>(?:⚡|✨)?\s*(?:Краткий ответ|Краткая выжимка|Суть ответа)\s*(?:\([^\)]*\))?<\/h3>([\s\S]*?)(?=<hr|<h2|<h3|$)/gi,
               function(match, p1) {
-                return '<div class="callout callout-tldr"><div class="callout-header"><span class="callout-icon">⚡</span> Краткий ответ (TL;DR для повторения)</div><div class="callout-content">' + p1 + '</div></div>';
+                return '<div class="callout callout-tldr"><div class="callout-header"><span class="callout-icon">⚡</span> Краткая выжимка (TL;DR — суть ответа за 30 секунд)</div><div class="callout-content">' + p1 + '</div></div>';
               }
             );
 
