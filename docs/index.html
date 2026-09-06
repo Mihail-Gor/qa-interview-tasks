@@ -103,6 +103,13 @@
             var frequency = (rawYaml.match(/frequency:\s*([^\s\n\r]+)/) || [])[1] || '';
             var confidence = (rawYaml.match(/confidence:\s*([^\s\n\r]+)/) || [])[1] || '';
             var date = (rawYaml.match(/(?:date|last_reviewed):\s*([^\s\n\r]+)/) || [])[1] || '';
+            var company = (rawYaml.match(/company:\s*["']?([^"'\n\r]+)["']?/) || [])[1] || '';
+            
+            // Interpolate frontmatter variables in body
+            if (title) body = body.replace(/{{\s*title\s*}}/g, title);
+            if (company) body = body.replace(/{{\s*company\s*}}/g, company);
+            if (date) body = body.replace(/{{\s*date\s*}}/g, date);
+            if (category) body = body.replace(/{{\s*category\s*}}/g, category);
             
             // Extract tags
             var tags = [];
