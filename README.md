@@ -1,4 +1,4 @@
-# 🎯 Java QA Automation Interview Hub & Knowledge Base
+﻿# 🎯 Java QA Automation Interview Hub & Knowledge Base
 
 > Полноценный сайт и структурированная база знаний для подготовки к собеседованиям на позицию **Middle / Senior Java QA Automation Engineer (Backend + Frontend)**.
 
@@ -79,7 +79,7 @@ python -m http.server 3000 --directory docs
 │   │   └── 2026/                      # Архив дебрифингов
 │   └── templates/                     # Шаблоны вопросов и интервью
 │
-��── src/                               # Исходный код Java задач и тестов
+├── src/                               # Исходный код Java задач и тестов
     ├── main/java/org/example/         # Реализации алгоритмических задач
     └── test/java/org/example/         # Автотесты (JUnit 5 + AssertJ)
 ```

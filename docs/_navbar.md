@@ -26,4 +26,3 @@
 * 📋 Ретроспективы
   * [Трекер пробелов (Gaps Backlog)](interviews/gaps-backlog.md)
   * [Разбор интервью (Fintech)](interviews/2026/2026-09-07_SampleCompany_SeniorQA.md)
-* [🌓 Тема](javascript:toggleDarkMode())
