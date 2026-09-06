@@ -1,15 +1,16 @@
 <!-- _coverpage.md -->
 
-# 🎯 Java QA Automation <small>Interview Knowledge Base</small>
+# 🎯 Java QA Automation
+## Интерактивная база знаний для собеседований
 
-> Интерактивная база знаний, шпаргалки и разборы реальных задач для собеседований на позиции Middle/Senior QA Automation (Backend + Frontend).
+> Структурированная шпаргалка, разборы типовых вопросов и реальных задач с собеседований на позиции Middle/Senior QA Automation (Backend + Frontend).
 
-- ⚡ **TL;DR карточки** для экспресс-повторения за 30 секунд
-- 🧩 **Live Coding** с тестами и разбором сложности $O(N)$
-- ☕ **Java Core & Multithreading** (Коллекции, CAS, JMM, JVM Memory)
+- ⚡ **TL;DR карточки** для экспресс-повторения тем за 30 секунд
+- 🧩 **Live Coding задачи** с подробным разбором сложности $O(N)$ и тестами
+- ☕ **Java Core & Multithreading** (Коллекции, CAS, JMM, JVM Memory & GC)
 - ⚙️ **Backend Automation** (REST Assured, SQL, Kafka, Awaitility)
-- 🌐 **Frontend Automation** (Selenium, Selenide, Shadow DOM)
-- 📋 **Трекер пробелов** и дебрифинги собеседований
+- 🌐 **Frontend Automation** (Selenium, Selenide, Shadow DOM, Waits)
+- 📋 **Ретроспективы** и трекер пробелов после собеседований
 
 [⚡ Начать подготовку](README.md)
 [🧩 Live Coding задачи](questions/algorithms-tasks/tasks-overview.md)

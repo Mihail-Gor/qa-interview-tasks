@@ -10,15 +10,40 @@
   <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%22100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
   
-  <!-- Theme: Docsify Themeable / Vue -->
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Theme: Docsify Base -->
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
   <link rel="stylesheet" href="assets/custom.css">
   
-  <!-- FontAwesome for icons -->
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+  <!-- Initial theme detection to prevent flash -->
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('DOCSIFY_THEME');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        document.documentElement.classList.add('dark');
+        document.addEventListener('DOMContentLoaded', function() {
+          document.body.classList.add('dark');
+        });
+      }
+    })();
+  </script>
 </head>
 <body>
+  <!-- Theme Toggle Floating Button -->
+  <div class="theme-switch-wrapper">
+    <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Сменить тему оформления" title="Сменить тему оформления">
+      <span class="icon-sun">☀️</span>
+      <span class="icon-moon">🌙</span>
+      <span class="theme-label">Тема</span>
+    </button>
+  </div>
+
   <div id="app">Загрузка базы знаний...</div>
 
   <script>
@@ -47,7 +72,7 @@
       
       // Copy Code
       copyCode: {
-        buttonText: '📋 Копировать',
+        buttonText: '📋 Скопировать',
         errorText: 'Ошибка',
         successText: 'Скопировано!'
       },
@@ -92,7 +117,7 @@
             var badgesHtml = '<div class="article-meta-card">';
             
             if (category) {
-              badgesHtml += '<span class="badge" style="background:#e0e7ff;color:#4338ca;">📁 ' + category + '</span>';
+              badgesHtml += '<span class="badge badge-category">📁 ' + category + '</span>';
             }
             if (difficulty) {
               var diffClass = difficulty === 'easy' ? 'badge-easy' : (difficulty === 'hard' ? 'badge-hard' : 'badge-medium');
@@ -101,19 +126,19 @@
             }
             if (frequency) {
               var freqClass = frequency === 'high' ? 'badge-high' : (frequency === 'medium' ? 'badge-freq-med' : 'badge-freq-low');
-              var freqIcon = frequency === 'high' ? '🔥 Высокая' : (frequency === 'medium' ? '⚡ Средняя' : '🔹 Редкая');
+              var freqIcon = frequency === 'high' ? '🔥 Часто' : (frequency === 'medium' ? '⚡ Средне' : '🔹 Редко');
               badgesHtml += '<span class="badge ' + freqClass + '">Частота: ' + freqIcon + '</span>';
             }
             if (confidence) {
               var stars = '⭐'.repeat(parseInt(confidence, 10) || 0);
-              badgesHtml += '<span class="badge" style="background:#fef3c7;color:#92400e;">Уверенность: ' + stars + ' (' + confidence + '/5)</span>';
+              badgesHtml += '<span class="badge badge-confidence">Уверенность: ' + stars + ' (' + confidence + '/5)</span>';
             }
             if (date) {
-              badgesHtml += '<span class="badge" style="background:#f1f5f9;color:#64748b;">📅 ' + date + '</span>';
+              badgesHtml += '<span class="badge badge-date">📅 ' + date + '</span>';
             }
             
             if (tags.length > 0) {
-              badgesHtml += '<div style="width:100%;margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">';
+              badgesHtml += '<div class="meta-tags-container">';
               tags.forEach(function(tag) {
                 badgesHtml += '<span class="badge badge-tag">#' + tag + '</span>';
               });
@@ -125,21 +150,51 @@
             return badgesHtml + body;
           });
           
-          // Add Dark Mode Toggle in Navbar
-          hook.doneEach(function () {
-            var isDark = localStorage.getItem('DOCSIFY_DARK_MODE') === 'true';
-            if (isDark) {
-              document.body.classList.add('dark');
-            }
+          // Hook after markdown rendering for Callouts & Styling enhancements
+          hook.afterEach(function (html, next) {
+            // Transform TL;DR heading into callout card
+            html = html.replace(
+              /<h3[^>]*>(?:⚡|✨)?\s*Краткий ответ\s*(?:\(TL;DR[^)]*\))?<\/h3>([\s\S]*?)(?=<hr|<h2|<h3|$)/gi,
+              function(match, p1) {
+                return '<div class="callout callout-tldr"><div class="callout-header"><span class="callout-icon">⚡</span> Краткий ответ (TL;DR для повторения)</div><div class="callout-content">' + p1 + '</div></div>';
+              }
+            );
+
+            // Transform Tricky questions heading into callout card
+            html = html.replace(
+              /<h3[^>]*>(?:🔥|💡|🎯)?\s*(?:Дополнительные\/каверзные|Каверзные)\s*вопросы[^<]*<\/h3>([\s\S]*?)(?=<hr|<h2|<h3|$)/gi,
+              function(match, p1) {
+                return '<div class="callout callout-tricky"><div class="callout-header"><span class="callout-icon">🔥</span> Каверзные вопросы на собеседовании</div><div class="callout-content">' + p1 + '</div></div>';
+              }
+            );
+
+            // Transform Related tasks heading into callout card
+            html = html.replace(
+              /<h3[^>]*>(?:🔗|📌)?\s*Связанные\s*(?:материалы|задачи)[^<]*<\/h3>([\s\S]*?)(?=<hr|<h2|<h3|$)/gi,
+              function(match, p1) {
+                return '<div class="callout callout-links"><div class="callout-header"><span class="callout-icon">🔗</span> Связанные задачи и материалы</div><div class="callout-content">' + p1 + '</div></div>';
+              }
+            );
+
+            next(html);
           });
         }
       ]
     };
-    
+
+    // Dark Mode Switcher Functionality
     function toggleDarkMode() {
-      var isDark = document.body.classList.toggle('dark');
-      localStorage.setItem('DOCSIFY_DARK_MODE', isDark);
+      var isDark = document.documentElement.classList.toggle('dark');
+      document.body.classList.toggle('dark', isDark);
+      localStorage.setItem('DOCSIFY_THEME', isDark ? 'dark' : 'light');
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var btn = document.getElementById('theme-toggle-btn');
+      if (btn) {
+        btn.addEventListener('click', toggleDarkMode);
+      }
+    });
   </script>
 
   <!-- Docsify Core & Plugins -->
