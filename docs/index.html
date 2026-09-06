@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>QA Automation Interview Knowledge Base</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="База знаний для подготовки к собеседованиям Java QA Automation Engineer (Backend + Frontend)">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%22100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
+  
+  <!-- Theme: Docsify Themeable / Vue -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
+  <link rel="stylesheet" href="assets/custom.css">
+  
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+</head>
+<body>
+  <div id="app">Загрузка базы знаний...</div>
+
+  <script>
+    window.$docsify = {
+      name: '🎯 QA Interview Hub',
+      repo: '',
+      loadSidebar: true,
+      loadNavbar: true,
+      coverpage: true,
+      onlyCover: false,
+      auto2top: true,
+      maxLevel: 4,
+      subMaxLevel: 3,
+      sidebarDisplayLevel: 1,
+      themeColor: '#3b82f6',
+      
+      // Full-text Search
+      search: {
+        maxAge: 86400000,
+        paths: 'auto',
+        placeholder: '🔍 Поиск по базе знаний...',
+        noData: 'Ничего не найдено 😞',
+        depth: 4,
+        hideOtherSidebarContent: false
+      },
+      
+      // Copy Code
+      copyCode: {
+        buttonText: '📋 Копировать',
+        errorText: 'Ошибка',
+        successText: 'Скопировано!'
+      },
+      
+      // Pagination
+      pagination: {
+        previousText: '⬅️ Предыдущая тема',
+        nextText: 'Следующая тема ➡️',
+        crossChapter: true,
+        crossChapterText: true,
+      },
+      
+      // Custom Plugins / Hooks
+      plugins: [
+        function (hook, vm) {
+          // Frontmatter parsing and badges generation
+          hook.beforeEach(function (content) {
+            var frontmatterMatch = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+            if (!frontmatterMatch) return content;
+            
+            var rawYaml = frontmatterMatch[1];
+            var body = content.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '');
+            
+            // Extract fields
+            var title = (rawYaml.match(/title:\s*["']?([^"'\n\r]+)["']?/) || [])[1] || '';
+            var category = (rawYaml.match(/category:\s*([^\s\n\r]+)/) || [])[1] || '';
+            var difficulty = (rawYaml.match(/difficulty:\s*([^\s\n\r]+)/) || [])[1] || '';
+            var frequency = (rawYaml.match(/frequency:\s*([^\s\n\r]+)/) || [])[1] || '';
+            var confidence = (rawYaml.match(/confidence:\s*([^\s\n\r]+)/) || [])[1] || '';
+            var date = (rawYaml.match(/(?:date|last_reviewed):\s*([^\s\n\r]+)/) || [])[1] || '';
+            
+            // Extract tags
+            var tags = [];
+            var tagSection = rawYaml.match(/tags:\r?\n((?:\s*-\s*[^\r\n]+\r?\n?)*)/);
+            if (tagSection && tagSection[1]) {
+              tags = tagSection[1].split('\n')
+                .map(function(line) { return line.replace(/^\s*-\s*/, '').trim(); })
+                .filter(function(t) { return t.length > 0; });
+            }
+            
+            // Build Badges HTML
+            var badgesHtml = '<div class="article-meta-card">';
+            
+            if (category) {
+              badgesHtml += '<span class="badge" style="background:#e0e7ff;color:#4338ca;">📁 ' + category + '</span>';
+            }
+            if (difficulty) {
+              var diffClass = difficulty === 'easy' ? 'badge-easy' : (difficulty === 'hard' ? 'badge-hard' : 'badge-medium');
+              var diffIcon = difficulty === 'easy' ? '🟢 Easy' : (difficulty === 'hard' ? '🔴 Hard' : '🟡 Medium');
+              badgesHtml += '<span class="badge ' + diffClass + '">Сложность: ' + diffIcon + '</span>';
+            }
+            if (frequency) {
+              var freqClass = frequency === 'high' ? 'badge-high' : (frequency === 'medium' ? 'badge-freq-med' : 'badge-freq-low');
+              var freqIcon = frequency === 'high' ? '🔥 Высокая' : (frequency === 'medium' ? '⚡ Средняя' : '🔹 Редкая');
+              badgesHtml += '<span class="badge ' + freqClass + '">Частота: ' + freqIcon + '</span>';
+            }
+            if (confidence) {
+              var stars = '⭐'.repeat(parseInt(confidence, 10) || 0);
+              badgesHtml += '<span class="badge" style="background:#fef3c7;color:#92400e;">Уверенность: ' + stars + ' (' + confidence + '/5)</span>';
+            }
+            if (date) {
+              badgesHtml += '<span class="badge" style="background:#f1f5f9;color:#64748b;">📅 ' + date + '</span>';
+            }
+            
+            if (tags.length > 0) {
+              badgesHtml += '<div style="width:100%;margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">';
+              tags.forEach(function(tag) {
+                badgesHtml += '<span class="badge badge-tag">#' + tag + '</span>';
+              });
+              badgesHtml += '</div>';
+            }
+            
+            badgesHtml += '</div>\n\n';
+            
+            return badgesHtml + body;
+          });
+          
+          // Add Dark Mode Toggle in Navbar
+          hook.doneEach(function () {
+            var isDark = localStorage.getItem('DOCSIFY_DARK_MODE') === 'true';
+            if (isDark) {
+              document.body.classList.add('dark');
+            }
+          });
+        }
+      ]
+    };
+    
+    function toggleDarkMode() {
+      var isDark = document.body.classList.toggle('dark');
+      localStorage.setItem('DOCSIFY_DARK_MODE', isDark);
+    }
+  </script>
+
+  <!-- Docsify Core & Plugins -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+
+  <!-- Prism Syntax Highlighting -->
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-clike.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-yaml.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-properties.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-markdown.min.js"></script>
+</body>
+</html>
